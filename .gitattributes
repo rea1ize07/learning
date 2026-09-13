@@ -1,0 +1,30 @@
+# 统一行尾符规则
+#
+# 背景：Windows 用 CRLF 换行，Linux/Mac 用 LF。不统一的话，
+# 同一份文件在不同系统上 git 会认为「整个文件都改了」，
+# 每次 diff 都是满屏红绿，没法看。
+#
+# 规则：仓库里一律存 LF，检出到你电脑时自动转成 CRLF。
+
+* text=auto eol=lf
+
+# Windows 批处理脚本必须是 CRLF，否则可能执行异常
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 二进制文件不做任何换行符转换（转了就损坏）
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.pt   binary
+*.pth  binary
+*.safetensors binary
+*.onnx binary
+*.npy  binary
+*.npz  binary
+*.wav  binary
+*.mp3  binary
+*.flac binary

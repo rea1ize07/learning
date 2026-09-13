@@ -1,0 +1,77 @@
+# ============================================================
+# F:\AI 的 git 忽略规则
+#
+# 原则：只提交「代码 + 笔记 + 文档」这类小而可读的东西。
+#       所有「能重新下载/重新生成」的大文件一律不提交。
+#   理由：GitHub 单文件超 100MB 会被拒绝，仓库超 1GB 就难用了。
+# ============================================================
+
+# ---------- 虚拟环境（5.2G，绝不能被提交）----------
+envs/
+.venv/
+venv/
+
+# ---------- 缓存（2.6G，能重新下载）----------
+cache/
+
+# ---------- 大文件目录：忽略内容，但保留目录结构 ----------
+# `*` 忽略目录下所有内容，`!.gitkeep` 把占位文件放行，
+# 这样 clone 下来仍能看到空目录，而不是一片缺失。
+datasets/*
+!datasets/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+papers/*
+!papers/.gitkeep
+
+# ---------- 模型权重（动辄几百 MB ~ 几 GB）----------
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.h5
+*.pb
+
+# ---------- Python 运行产物 ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+
+# ---------- 训练输出 / 日志 ----------
+runs/
+outputs/
+logs/
+wandb/
+lightning_logs/
+*.log
+
+# ---------- IDE / 编辑器 ----------
+.idea/
+.vscode/
+*.swp
+*~
+
+# ---------- 操作系统 ----------
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---------- 密钥/凭证：防手滑，永远不要提交 ----------
+.env
+.env.*
+*.key
+*.pem
+secrets.*
+credentials.*
