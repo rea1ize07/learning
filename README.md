@@ -28,8 +28,20 @@ F:\AI\
 │   ├── 04-conformer\              关卡4 Conformer
 │   └── 99-sandbox\                随手试验用
 ├── checkpoints\           模型权重（.pt / .pth / .safetensors）
-├── papers\                论文 PDF（配合 Zotero 用）
+├── papers\                论文 PDF（9 份，约 51MB，已被 .gitignore 排除，不入库）
+│   ├── The Last AI Built by Humans...pdf   RSI 综述（2026-09，起点文献）
+│   ├── 2306.04469 - Model-Based Deep Learning.pdf   ⭐ 信号处理×深度学习，主场
+│   ├── 2303.18223 / 2012.12556 / 2009.06732         地基线（LLM / ViT / 高效 Transformer）
+│   ├── 2404.14387 / 2507.21046 / 2508.07407         自演化线（LLM / Agent ×2）
+│   └── 大语言模型（赵鑫等，人大，高教社2024）.pdf      中文教材，391 页
 └── notes\                 笔记、推导、实验结果记录
+    ├── 学习路径-视频版.md           四站视频路径（神经网络→CNN→Transformer→LLM）
+    ├── 大语言模型-配套视频清单.md    B 站 23 集 8.8h 官方课，含 BV 号与时长
+    └── surveys\                     9 篇综述的中文笔记 + README 索引
+        ├── README.md                阅读顺序与阅读提醒（先看这个）
+        ├── 00-大语言模型-赵鑫-学习导览.md
+        ├── 01-llm-survey … 04-model-based-deep-learning
+        └── 05-self-evolution … 08-rsi-last-ai-built-by-humans
 ```
 
 ---
@@ -73,6 +85,30 @@ TORCH_HOME    = F:\AI\cache\torch
 - ❌ 不能训：7B 级全参微调、大 batch ViT
 - 必备技巧：AMP 混合精度 + 梯度累积
 - 兜底算力：Kaggle（每周 30h 免费 GPU）、Colab T4、学校服务器
+
+---
+
+## 学习路径（两条线，别混）
+
+**A. 视频优先线（先建直觉，当前主线）** —— 完整文档 `notes\学习路径-视频版.md`
+
+| 站 | 主题 | 时长 | 资源 |
+|---|---|---|---|
+| 0 | 神经网络在干什么 | 1.5h | 3b1b 深度学习 Ch1–4 |
+| 1 | CNN | 4h | 3b1b 卷积 + 李宏毅 + 李沐 D2L |
+| 2 | Transformer | 4h | 3b1b Ch5–6 + 李宏毅 attention |
+| 3 | Conformer / 语音实战 | — | 汇合点，对应 `projects\04-conformer` |
+| 4 | **大语言模型全流程**（预训练→微调→对齐→解码→RAG→智能体） | 8.8h | 人大赵鑫 × Datawhale 官方视频 |
+
+第 4 站细节：B 站 23 集合集 <https://space.bilibili.com/431850986/lists/4940683>，
+章节与教材一一对应，剧集表见 `notes\大语言模型-配套视频清单.md`。
+⚠️ 另有同名**付费**课（49 元），内容一样，别买；⚠️ 第 1 集是发布会（62min），可跳。
+
+**B. 从零手写线（更陡，等有基础再回头）** —— 即下面的四关卡。
+
+**C. 文献线** —— 9 篇综述的中文笔记在 `notes\surveys\`，先读 `notes\surveys\README.md` 看顺序。
+信通背景的入口是 **04 Model-Based Deep Learning**（deep unfolding：ISTA→LISTA、PGD→DetNet、
+卡尔曼→KalmanNet），单卡可做实验，适合研一先出结果。
 
 ---
 
