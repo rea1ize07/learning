@@ -1,13 +1,16 @@
-# F:\AI — 深度学习学习工作区
+# D:\learning — 深度学习学习工作区
 
-创建于 2026-09-13。所有 AI 相关的环境、数据、代码、论文统一放这里，不再散落到 C/D 盘。
+创建于 2026-09-13。所有 AI 相关的环境、数据、代码、论文统一放这里。
+
+> **2026-09-20 本机迁移记录**：仓库从笔记本迁到本机，工作区路径 `F:\AI` → `D:\learning`；
+> 本机**无 NVIDIA 显卡**（AMD Radeon 核显），PyTorch 改用 **CPU 版**。详见下方「环境信息」。
 
 ---
 
 ## 目录结构
 
 ```
-F:\AI\
+D:\learning\
 ├── README.md              本文件：目录说明 + 学习路径 + 进度追踪
 ├── env.bat                一键激活虚拟环境（Windows 双击/命令行运行）
 ├── envs\
@@ -50,41 +53,62 @@ F:\AI\
 
 | 项 | 值 |
 |---|---|
-| 虚拟环境 | `F:\AI\envs\dl` |
-| Python | 3.11.2（来自 `C:\Python311`） |
-| 解释器路径 | `F:\AI\envs\dl\Scripts\python.exe` |
-| GPU | NVIDIA GeForce RTX 3060 Laptop, 6GB |
-| CUDA wheel | cu124 |
-| IDE | PyCharm Community 2022.3.1（`F:\PyCharm Community Edition 2022.3.1`） |
-| 系统 Python | `C:\Python311`（裸装，**不要往这里 pip install**） |
+| 虚拟环境 | `D:\learning\envs\dl` |
+| Python | 3.14.7（来自 `C:\Python314`） |
+| 解释器路径 | `D:\learning\envs\dl\Scripts\python.exe` |
+| GPU | **无 NVIDIA 显卡**（AMD Radeon 核显），仅 CPU |
+| PyTorch | `2.14.0+cpu`（CPU 版） |
+| IDE | 未安装 |
+| 系统 Python | `C:\Python314`（裸装，**不要往这里 pip install**，其 site-packages 不可写） |
 
-### 缓存重定向（已通过 setx 永久设置）
+> **与笔记本的差异**：笔记本是 RTX 3060 Laptop 6GB + CUDA（cu124）+ Python 3.11.2。
+> 本机是 CPU-only，`torch.cuda.is_available()` 恒为 `False`。
+
+### 缓存重定向
 
 ```
-PIP_CACHE_DIR = F:\AI\cache\pip
-HF_HOME       = F:\AI\cache\hf
-TORCH_HOME    = F:\AI\cache\torch
+PIP_CACHE_DIR = D:\learning\cache\pip
+HF_HOME       = D:\learning\cache\hf
+TORCH_HOME    = D:\learning\cache\torch
 ```
 
-**Why:** C 盘只有约 58GB 可用，pip 缓存、HuggingFace 模型（单个动辄 1–3GB）默认全塞 C 盘。
-新开的终端会自动带上这些变量；老终端需重开或手动 export。
+**Why:** pip 缓存、HuggingFace 模型（单个动辄 1–3GB）默认全塞 C 盘。
 
-### PyCharm 配置解释器
+**本机现状**：这些变量由 `env.bat` 在激活时设置，**尚未**用 `setx` 永久写入注册表。
+如果需要新开的终端自动带上，执行一次：
 
-`File → Settings → Project → Python Interpreter → Add Interpreter → Existing`
-选：`F:\AI\envs\dl\Scripts\python.exe`
+```cmd
+setx PIP_CACHE_DIR D:\learning\cache\pip
+setx HF_HOME       D:\learning\cache\hf
+setx TORCH_HOME    D:\learning\cache\torch
+```
 
-**不要**选 `C:\Python311` 或 Python 3.8，那两个是裸环境/旧环境。
+### 编辑器配置解释器
+
+本机未装 PyCharm。若之后装 VS Code / PyCharm，解释器一律指向：
+
+```
+D:\learning\envs\dl\Scripts\python.exe
+```
+
+**不要**选 `C:\Python314`（裸环境，且其 site-packages 不可写）。
 
 ---
 
-## 6GB 显存的能力边界
+## 算力边界（本机 CPU-only）
 
-- ✅ 能训：KWS、语音增强（DCCRN / Conv-TasNet 小配置）、whisper-tiny/base 微调、
-  char-level GPT、CIFAR 级 CNN
-- ❌ 不能训：7B 级全参微调、大 batch ViT
-- 必备技巧：AMP 混合精度 + 梯度累积
-- 兜底算力：Kaggle（每周 30h 免费 GPU）、Colab T4、学校服务器
+本机无 NVIDIA 显卡（AMD Radeon 核显），PyTorch 跑 CPU，`torch.cuda.is_available()` 恒为 `False`。
+
+- ✅ **CPU 完全够用**：`micrograd`、手写 conv / attention、小张量数值验证、小模型短跑
+- ⚠️ **CPU 很慢（能用，但按小时计）**：CIFAR 级 CNN、char-level GPT
+- ❌ **本机做不了**：任何 CUDA 依赖的实验、whisper 微调、7B 级全参微调、大 batch ViT
+- **重活一律扔云端**：Kaggle（每周 30h 免费 GPU）、Colab T4、学校服务器
+
+> **笔记本（RTX 3060 Laptop 6GB）另有一套边界**：能训 KWS、语音增强（DCCRN / Conv-TasNet 小配置）、
+> whisper-tiny/base 微调、char-level GPT、CIFAR 级 CNN；不能训 7B 全参与大 batch ViT；
+> 必备技巧是 AMP 混合精度 + 梯度累积。**这些在 CPU 上都不适用**，CPU 上瓶颈是纯算力。
+>
+> 迁移思路：**本机学习、写代码、调试 → 云端 GPU 跑重训练**。
 
 ---
 
@@ -135,26 +159,26 @@ TORCH_HOME    = F:\AI\cache\torch
 
 ```bash
 # 激活环境（Git Bash）
-source /f/AI/envs/dl/Scripts/activate
+source /d/learning/envs/dl/Scripts/activate
 
 # 或 Windows cmd / PowerShell
-F:\AI\env.bat
+D:\learning\env.bat
 
-# 检查 GPU 是否可用
-python -c "import torch;print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+# 检查 torch（本机 CPU-only，cuda 恒为 False）
+python -c "import torch;print(torch.__version__, torch.cuda.is_available())"
 
 # 看当前 venv 装了哪些包
 python -m pip list
 
 # 导出环境快照（备份用，放 notes\ 下）
-python -m pip freeze > /f/AI/notes/requirements-$(date +%Y%m%d).txt
+python -m pip freeze > /d/learning/notes/requirements-$(date +%Y%m%d).txt
 ```
 
 ---
 
 ## 待办 / 注意
 
-- [ ] PyCharm 2022.3.1 是 2022 年的版本，能用但偏旧；官方 Community 版免费，后续可考虑升级
-- [ ] 大数据集（LibriSpeech 完整版 ~60GB、WenetSpeech ~100GB+）下载前先确认 F 盘余量
-- [ ] F 盘根目录还有 `pythonProject1`~`pythonProject5` 等 PyCharm 遗留项目，确认无用后可归档
-- [ ] 旧环境 `C:\Users\王灿\AppData\Local\Programs\Python\Python38` 是本科遗留（配 `F:\python库` 里的 cp38 whl），如无引用可卸载回收 C 盘空间
+- [ ] 本机未装 IDE；如需，装 VS Code 或 PyCharm，解释器指向 `D:\learning\envs\dl\Scripts\python.exe`
+- [ ] 缓存变量目前只在 `env.bat` 里设置，未 `setx` 永久写入；需要永久生效可执行上面那三条 `setx`
+- [ ] 大数据集（LibriSpeech 完整版 ~60GB、WenetSpeech ~100GB+）下载前先确认磁盘余量
+- [ ] 本机 Python 3.14 较新，部分老库可能还没有 cp314 wheel，装包遇到问题留意这一点

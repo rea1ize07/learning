@@ -1,5 +1,5 @@
 # ============================================================
-# F:\AI 的 git 忽略规则
+# D:\learning 的 git 忽略规则
 #
 # 原则：只提交「代码 + 笔记 + 文档」这类小而可读的东西。
 #       所有「能重新下载/重新生成」的大文件一律不提交。
@@ -19,8 +19,10 @@ cache/
 # 这样 clone 下来仍能看到空目录，而不是一片缺失。
 datasets/*
 !datasets/.gitkeep
-checkpoints/*
-!checkpoints/.gitkeep
+data/*
+!data/.gitkeep
+models/*
+!models/.gitkeep
 papers/*
 !papers/.gitkeep
 
